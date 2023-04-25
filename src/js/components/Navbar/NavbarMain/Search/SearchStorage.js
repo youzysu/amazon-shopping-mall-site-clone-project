@@ -1,12 +1,10 @@
 const STORAGE_KEY = 'searchHistory';
 
-export class SearchStorage {
-  #storage;
+export default class SearchStorage {
+  #searchHistory;
 
   constructor() {
-    this.#storage = {
-      searchHistory: {},
-    };
+    this.#searchHistory = {};
     this.init();
   }
 
@@ -14,26 +12,26 @@ export class SearchStorage {
     const store = JSON.parse(localStorage.getItem(STORAGE_KEY));
 
     if (!store) return;
-    this.#storage.searchHistory = store;
+    this.#searchHistory = store;
   }
 
   addSearchWord(value) {
     const id = Date.now();
-    this.#storage.searchHistory[id] = value;
+    this.#searchHistory[id] = value;
 
     this.saveLocalStorage();
   }
 
   deleteSearchWord(id) {
-    delete this.#storage.searchHistory[id];
+    delete this.#searchHistory[id];
     this.saveLocalStorage();
   }
 
   saveLocalStorage() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.#storage.searchHistory));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.#searchHistory));
   }
 
   getSearchHistory() {
-    return this.#storage.searchHistory;
+    return this.#searchHistory;
   }
 }

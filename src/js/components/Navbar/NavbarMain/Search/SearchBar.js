@@ -1,24 +1,30 @@
-import { Component } from '../../../base/Component.js';
+import Component from '../../../base/Component.js';
+import { debounce } from '/src/js/utils/utils.js';
 
 export default class SearchBar extends Component {
-  constructor() {
-    super('search-bar', 'FORM');
-    this.node.setAttribute('autocomplete', 'off');
-    this.init();
-  }
-
-  clearInputValue() {
-    this.node.search.value = '';
-  }
-
-  setInputValue(value) {
-    this.node.search.value = value;
-  }
-
   getTemplate() {
     return `
-<input type="search" name="search" placeholder="검색 Amazon" />
+<input type="search" class="search-input" placeholder="검색 Amazon" />
 <button type="submit" class="submit-btn"></button>
     `;
+  }
+
+  setEvent() {
+    const { searchKeyword, recommendKeyword } = this.props;
+
+    this.addEvent(
+      'input',
+      '.search-input',
+      debounce(({ target }) => searchKeyword(target.value), 300)
+    );
+
+    this.addEvent(
+      'click',
+      '.search-input',
+      debounce(({ target }) => {
+        if (target.value) return;
+        recommendKeyword();
+      })
+    );
   }
 }

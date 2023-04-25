@@ -1,87 +1,45 @@
-import { Login } from './Login.js';
+import Component from '../../base/Component.js';
+import Login from './Login.js';
 import Search from './Search/Search.js';
-import { Shipping } from './Shipping.js';
-import { Component } from '/src/js/components/base/Component.js';
+import Shipping from './Shipping.js';
 
-export class NavbarMain extends Component {
-  constructor(main) {
-    super('navbar-main');
-    this.logo = new Logo();
-    this.shipping = new Shipping(main);
-    this.search = new Search(main);
-    this.nation = new Nation();
-    this.login = new Login(main);
-    this.myPage = new MyPage();
-    this.cart = new Cart();
-    this.init();
-  }
-
-  getTemplate() {
-    return [
-      this.logo.node,
-      this.shipping.node,
-      this.search.node,
-      this.nation.node,
-      this.login.node,
-      this.myPage.node,
-      this.cart.node,
-    ];
-  }
-}
-
-class Logo extends Component {
-  constructor() {
-    super('logo', 'H1');
-    this.init();
-  }
-
+export default class NavbarMain extends Component {
   getTemplate() {
     return `
+<h1 class="logo">
   <a href="/">
-    <img class="amazon-icon" src="/src/assets/images/BI.svg" alt="amazon logo icon" />
+  <img class="amazon-icon" src="/src/assets/images/BI.svg" alt="amazon logo icon" />
   </a>
+</h1>
+<div class="shipping"></div>
+<div class="search"></div>
+<div class="nation">
+  <img src="/src/assets/images/flag.svg" alt="flag icon" />
+  <span class="main-text">KO</span>
+</div>
+<div class="login"></div>
+<div class="my-page">
+  <span class="label-text">반품</span>
+  <span class="main-text">& 주문</span>
+</div>
+<div class="cart">
+  <img src="/src/assets/symbols/cart.svg" alt="cart icon" />
+  <span class="main-text">장바구니</span>
+</div>
     `;
   }
-}
 
-class Nation extends Component {
-  constructor() {
-    super('nation');
-    this.init();
+  renderChildren() {
+    const shippingElement = this.element.querySelector('.shipping');
+    const searchElement = this.element.querySelector('.search');
+    const loginElement = this.element.querySelector('.login');
+
+    new Shipping(shippingElement);
+    new Search(searchElement);
+    new Login(loginElement);
   }
 
-  getTemplate() {
-    return `
-<img src="/src/assets/images/flag.svg" alt="flag icon" />
-<span class="main-text">KO</span>
-    `;
-  }
-}
-
-class MyPage extends Component {
-  constructor() {
-    super('my-page');
-    this.init();
-  }
-
-  getTemplate() {
-    return `
-<span class="label-text">반품</span>
-<span class="main-text">& 주문</span>
-    `;
-  }
-}
-
-class Cart extends Component {
-  constructor() {
-    super('cart');
-    this.init();
-  }
-
-  getTemplate() {
-    return `
-<img src="/src/assets/symbols/cart.svg" alt="cart icon" />
-<span class="main-text">장바구니</span>
-    `;
+  setEvent() {
+    this.addEvent('mouseover', '.shipping', () => {});
   }
 }

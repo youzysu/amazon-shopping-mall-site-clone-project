@@ -1,11 +1,6 @@
-import { Component } from '../../base/Component.js';
+import Component from '../../base/Component.js';
 
-export class NavbarSub extends Component {
-  constructor() {
-    super('navbar-sub');
-    this.init();
-  }
-
+export default class NavbarSub extends Component {
   getTemplate() {
     return `
 <div class="left">

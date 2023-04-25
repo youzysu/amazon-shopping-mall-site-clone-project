@@ -1,19 +1,28 @@
-import { Navbar } from '../js/components/Navbar/Navbar.js';
-import { Main } from './components/Main.js';
-import Sidebar from './components/Sidebar/Sidebar.js';
+import Navbar from './components/Navbar/Navbar.js';
+import Component from './components/base/Component.js';
 
-export class App {
-  #node;
-
-  constructor(rootNode) {
-    this.#node = rootNode;
-    this.sidebar = new Sidebar();
-    this.main = new Main();
-    this.header = new Navbar(this.sidebar, this.main);
-    this.render();
+export class App extends Component {
+  getTemplate() {
+    return `
+    <header class="navbar"></header>
+    <main class="content"></main>
+    <aside class="sidebar"></aside>
+    <div class="backdrop"></div>
+    `;
   }
 
-  render() {
-    this.#node.append(this.header.node, this.sidebar.node, this.main.node);
+  renderChildren() {
+    const navbarElement = this.element.querySelector('.navbar');
+    const contentElement = this.element.querySelector('.content');
+    const sidebarElement = this.element.querySelector('.sidebar');
+
+    new Navbar(navbarElement, { handleDimmed: () => this.handleDimmed() });
+    new Content(contentElement, { handleDimmed: () => this.handleDimmed() });
+    new Sidebar(sidebarElement, { handleDimmed: () => this.handleDimmed() });
+  }
+
+  handleDimmed() {
+    const backdropElement = this.element.querySelector('.backdrop');
+    backdropElement.classList.toggle('active');
   }
 }

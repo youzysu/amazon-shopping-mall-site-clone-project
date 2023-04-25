@@ -1,48 +1,54 @@
-export class Component {
-  #node;
+export default class Component {
+  element;
+  props;
+  state;
 
-  constructor(className = '', tagName = 'DIV') {
-    this.#node = document.createElement(tagName);
-    this.#node.className = className;
+  constructor(element, props) {
+    this.element = element;
+    this.props = props;
+    this.initState();
+    this.setEvent();
+    this.render();
   }
 
-  init(state) {
-    this.render(state);
-    this.initEventHandlers();
-  }
+  initState() {}
 
-  render(state) {
+  setEvent() {}
+
+  render() {
     this.dropPreviousRender();
-    const template = this.getTemplate(state);
 
-    if (typeof template === 'string') {
-      const templateElement = document.createElement('template');
-      templateElement.innerHTML = template;
-      this.#node.append(templateElement.content);
-      return;
-    }
+    const templateElement = document.createElement('template');
+    templateElement.innerHTML = this.getTemplate();
+    this.element.append(templateElement.content.cloneNode(true));
 
-    this.#node.append(...template);
+    this.renderChildren();
+  }
+
+  getTemplate() {
+    return '';
+  }
+
+  renderChildren() {}
+
+  setState(newState) {
+    this.state = { ...this.state, ...newState };
+    console.log(this.state);
+    this.render();
   }
 
   dropPreviousRender() {
-    if (this.#node.innerHTML) {
-      this.#node.innerHTML = '';
+    if (this.element.innerHTML) {
+      this.element.innerHTML = '';
     }
   }
 
-  initEventHandlers() {}
-
-  static makeElement(parentTagName, literal) {
-    const parentElement = document.createElement(parentTagName);
-    const templateElement = document.createElement('template');
-    templateElement.innerHTML = literal;
-
-    parentElement.append(templateElement.content);
-    return parentElement;
-  }
-
-  get node() {
-    return this.#node;
+  addEvent(eventType, selector, callback) {
+    this.element.addEventListener(eventType, (event) => {
+      if (!event.target.closest(selector)) {
+        return false;
+      }
+      callback(event);
+    });
   }
 }
