@@ -1,50 +1,57 @@
+import { updateElement } from './updateElement.js';
+
 export default class Component {
   element;
-  props;
   state;
+  props;
 
   constructor(element, props) {
     this.element = element;
     this.props = props;
     this.initState();
-    this.setEvent();
     this.render();
   }
 
   initState() {}
+  getTemplate() {
+    return '';
+  }
 
   setEvent() {}
 
   render() {
-    this.dropPreviousRender();
+    const { element } = this;
 
-    const templateElement = document.createElement('template');
-    templateElement.innerHTML = this.getTemplate();
-    this.element.append(templateElement.content.cloneNode(true));
+    const newNode = element.cloneNode(true);
+    newNode.innerHTML = this.getTemplate();
+
+    const oldChildNodes = [...element.childNodes];
+    const newChildNodes = [...newNode.childNodes];
+    const max = Math.max(oldChildNodes.length, newChildNodes.length);
+
+    for (let i = 0; i < max; i++) {
+      updateElement(element, newChildNodes[i], oldChildNodes[i]);
+    }
 
     this.renderChildren();
-  }
-
-  getTemplate() {
-    return '';
+    requestAnimationFrame(() => this.setEvent());
   }
 
   renderChildren() {}
 
   setState(newState) {
     this.state = { ...this.state, ...newState };
-    console.log(this.state);
     this.render();
   }
 
-  dropPreviousRender() {
-    if (this.element.innerHTML) {
-      this.element.innerHTML = '';
-    }
-  }
-
-  addEvent(eventType, selector, callback) {
+  handleEvent(eventType, selector, callback) {
     this.element.addEventListener(eventType, (event) => {
+      if (!event.target.closest(selector)) {
+        return false;
+      }
+      callback(event);
+    });
+    this.element.removeEventListener(eventType, (event) => {
       if (!event.target.closest(selector)) {
         return false;
       }

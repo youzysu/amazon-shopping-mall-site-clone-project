@@ -13,16 +13,7 @@ export class App extends Component {
 
   renderChildren() {
     const navbarElement = this.element.querySelector('.navbar');
-    const contentElement = this.element.querySelector('.content');
-    const sidebarElement = this.element.querySelector('.sidebar');
 
-    new Navbar(navbarElement, { handleDimmed: () => this.handleDimmed() });
-    new Content(contentElement, { handleDimmed: () => this.handleDimmed() });
-    new Sidebar(sidebarElement, { handleDimmed: () => this.handleDimmed() });
-  }
-
-  handleDimmed() {
-    const backdropElement = this.element.querySelector('.backdrop');
-    backdropElement.classList.toggle('active');
+    new Navbar(navbarElement);
   }
 }

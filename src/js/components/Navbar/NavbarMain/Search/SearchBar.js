@@ -12,19 +12,19 @@ export default class SearchBar extends Component {
   setEvent() {
     const { searchKeyword, recommendKeyword } = this.props;
 
-    this.addEvent(
+    this.handleEvent(
       'input',
       '.search-input',
       debounce(({ target }) => searchKeyword(target.value), 300)
     );
 
-    this.addEvent(
+    this.handleEvent(
       'click',
       '.search-input',
       debounce(({ target }) => {
         if (target.value) return;
         recommendKeyword();
-      })
+      }, 300)
     );
   }
 }
