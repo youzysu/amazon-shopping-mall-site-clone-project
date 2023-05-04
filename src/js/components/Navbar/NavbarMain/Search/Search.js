@@ -23,7 +23,9 @@ export default class Search extends Component {
       'input',
       debounce((event) => this.showAutoComplete(event), 300)
     );
-    this.node.addEventListener('keydown', ({ key }) => this.handleKeyDown(key));
+    this.node.addEventListener('keydown', ({ key, isComposing }) =>
+      this.handleKeyDown(key, isComposing)
+    );
     this.node.addEventListener('submit', (event) => this.handleSubmit(event));
   }
 
@@ -42,10 +44,10 @@ export default class Search extends Component {
     this.main.onDimmed();
   }
 
-  async showAutoComplete({ target }) {
-    const userInput = target.value;
+  async showAutoComplete(event) {
+    const userInput = event.target.value;
     if (!userInput) {
-      this.showRecommendWords({ target });
+      this.showRecommendWords(event);
       return;
     }
 
@@ -54,14 +56,19 @@ export default class Search extends Component {
     this.searchPanel.render({ keywords: autoComplete, history: [], value: userInput });
   }
 
-  handleKeyDown(key) {
+  handleKeyDown(key, isComposing) {
     const isArrowDownKey = key === 'ArrowDown';
     const isArrowUpKey = key === 'ArrowUp';
     const isEscKey = key === 'Escape';
 
     if (isArrowDownKey || isArrowUpKey) {
+      if (isComposing) {
+        return;
+      }
+
       const value = this.searchPanel.onKeyDown(key);
       this.searchBar.setInputValue(value);
+      return;
     }
 
     if (isEscKey) {
@@ -83,7 +90,6 @@ export default class Search extends Component {
 
     const { history, recommend } = this.model.getRecommend();
     this.searchPanel.render({ history: history, keywords: recommend });
-    this.searchBar.clearInputValue();
   }
 
   getTemplate() {
