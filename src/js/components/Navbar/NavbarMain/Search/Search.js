@@ -53,6 +53,7 @@ export default class Search extends Component {
 
     await this.model.requestAutoCompleteWords(userInput, 10);
     const { autoComplete } = this.model.getAutoComplete();
+
     this.searchPanel.render({ keywords: autoComplete, history: [], value: userInput });
   }
 
@@ -61,11 +62,7 @@ export default class Search extends Component {
     const isArrowUpKey = key === 'ArrowUp';
     const isEscKey = key === 'Escape';
 
-    if (isArrowDownKey || isArrowUpKey) {
-      if (isComposing) {
-        return;
-      }
-
+    if (!isComposing && (isArrowDownKey || isArrowUpKey)) {
       const value = this.searchPanel.onKeyDown(key);
       this.searchBar.setInputValue(value);
       return;
