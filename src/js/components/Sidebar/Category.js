@@ -9,6 +9,27 @@ export default class Category extends Component {
     this.init(info);
   }
 
+  initEventHandlers() {
+    this.node.addEventListener('click', ({ target }) => this.handleClick(target));
+  }
+
+  handleClick(target) {
+    const categorySummary = target.closest('.category-menu');
+    const categoryList = target.closest('.category-list');
+
+    if (categoryList) {
+      return;
+    }
+    if (categorySummary) {
+      this.toggleCompressedMenu(categorySummary);
+    }
+  }
+
+  toggleCompressedMenu(categorySummary) {
+    categorySummary.querySelector('.summary-btn').classList.toggle('active');
+    this.compressedCategoryList.categoryList.node.classList.toggle('active');
+  }
+
   getTemplate(info) {
     const { title, menus, compressedMenus } = info;
 
@@ -55,7 +76,7 @@ class CategoryList extends Component {
 
 class CompressedCategoryList extends Component {
   constructor() {
-    super('category-compressed', 'DETAILS');
+    super('category-compressed', 'DIV');
     this.categorySummary = new CategorySummary();
     this.categoryList = new CategoryList();
   }
@@ -69,7 +90,7 @@ class CompressedCategoryList extends Component {
 
 class CategorySummary extends Component {
   constructor() {
-    super('category-menu', 'SUMMARY');
+    super('category-menu', 'DIV');
     this.init();
   }
 
