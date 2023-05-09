@@ -17,7 +17,9 @@ export default class Sidebar extends Component {
 
   handleClick(target) {
     const isCloseBtn = target.closest('.close-button');
-    if (isCloseBtn) {
+    const isDimLayer = target.closest('.dim-layer');
+
+    if (isCloseBtn || isDimLayer) {
       this.close();
     }
   }
