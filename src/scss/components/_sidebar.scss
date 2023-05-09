@@ -95,23 +95,25 @@
     }
 
     .category-compressed {
-      summary {
+      height: fit-content;
+
+      .category-menu {
         @include typography('body-md');
         @include categoryMenu(40px);
         cursor: pointer;
       }
 
       ul {
-        transition: opacity 200ms 100ms linear;
+        overflow: hidden;
+        max-height: 0;
         opacity: 0;
-      }
+        transition: max-height 0.3s ease-in-out, opacity 200ms 100ms linear;
 
-      &[open] ul {
-        opacity: 1;
-      }
-
-      &[open] .summary-btn {
-        transform: rotate(270deg);
+        &.active {
+          max-height: 3000px;
+          opacity: 1;
+          transition: max-height 0.3s ease-in-out, opacity 200ms 100ms linear;
+        }
       }
 
       .summary-btn {
@@ -119,6 +121,10 @@
         filter: $filter-button;
         transform: rotate(90deg);
         transition: transform 0.3s ease;
+
+        &.active {
+          transform: rotate(270deg);
+        }
       }
     }
   }
