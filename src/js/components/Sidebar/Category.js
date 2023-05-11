@@ -9,30 +9,8 @@ export default class Category extends Component {
     this.init(info);
   }
 
-  initEventHandlers() {
-    this.node.addEventListener('click', ({ target }) => this.handleClick(target));
-  }
-
-  handleClick(target) {
-    const categorySummary = target.closest('.category-menu');
-    const categoryList = target.closest('.category-list');
-
-    if (categoryList) {
-      return;
-    }
-    if (categorySummary) {
-      this.toggleCompressedMenu(categorySummary);
-    }
-  }
-
-  toggleCompressedMenu(categorySummary) {
-    categorySummary.querySelector('.summary-btn').classList.toggle('active');
-    this.compressedCategoryList.categoryList.node.classList.toggle('active');
-  }
-
   getTemplate(info) {
     const { title, menus, compressedMenus } = info;
-
     this.setTitle(title);
     this.categoryList.render(menus);
 
@@ -48,7 +26,6 @@ export default class Category extends Component {
     this.categoryTitle.node.innerText = title;
   }
 }
-
 class CategoryList extends Component {
   constructor() {
     super('category-list', 'UL');
@@ -79,6 +56,24 @@ class CompressedCategoryList extends Component {
     super('category-compressed', 'DIV');
     this.categorySummary = new CategorySummary();
     this.categoryList = new CategoryList();
+    this.initEventHandlers();
+  }
+
+  initEventHandlers() {
+    this.categorySummary.node.addEventListener('click', ({ target }) => this.handleClick(target));
+  }
+
+  handleClick(target) {
+    const summary = target.closest('.category-menu');
+
+    if (summary) {
+      this.toggle();
+    }
+  }
+
+  toggle() {
+    this.categorySummary.node.classList.toggle('active');
+    this.categoryList.node.classList.toggle('active');
   }
 
   getTemplate(menus) {
