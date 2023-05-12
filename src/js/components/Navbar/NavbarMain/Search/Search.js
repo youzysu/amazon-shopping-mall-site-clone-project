@@ -82,11 +82,28 @@ export default class Search extends Component {
     event.preventDefault();
 
     const { search } = event.target.elements;
-    const userInput = search.value;
-    this.model.addSearchWord(userInput);
+    const userInput = search.value.trim();
+    const isValidInput = this.validateSearchInput(userInput);
 
+    if (!isValidInput) {
+      return;
+    }
+
+    this.addValidatedSearchWord(isValidInput);
+  }
+
+  addValidatedSearchWord(userInput) {
+    this.model.addSearchWord(userInput);
     const { history, recommend } = this.model.getRecommend();
     this.searchPanel.render({ history: history, keywords: recommend });
+  }
+
+  validateSearchInput(userInput) {
+    if (!userInput) {
+      return;
+    }
+
+    return userInput;
   }
 
   getTemplate() {

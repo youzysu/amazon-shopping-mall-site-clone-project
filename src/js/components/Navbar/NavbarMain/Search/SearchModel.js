@@ -33,10 +33,18 @@ export default class SearchModel {
   }
 
   addSearchWord(value) {
+    this.deleteDuplicateWord(value);
     const id = Date.now();
     this.history[id] = value;
-
     this.saveLocalStorage();
+  }
+
+  deleteDuplicateWord(value) {
+    for (const id in this.history) {
+      if (this.history[id] === value) {
+        this.deleteSearchWord(id);
+      }
+    }
   }
 
   deleteSearchWord(id) {
