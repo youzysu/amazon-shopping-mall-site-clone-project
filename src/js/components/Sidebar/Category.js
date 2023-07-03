@@ -11,7 +11,6 @@ export default class Category extends Component {
 
   getTemplate(info) {
     const { title, menus, compressedMenus } = info;
-
     this.setTitle(title);
     this.categoryList.render(menus);
 
@@ -27,7 +26,6 @@ export default class Category extends Component {
     this.categoryTitle.node.innerText = title;
   }
 }
-
 class CategoryList extends Component {
   constructor() {
     super('category-list', 'UL');
@@ -55,9 +53,27 @@ class CategoryList extends Component {
 
 class CompressedCategoryList extends Component {
   constructor() {
-    super('category-compressed', 'DETAILS');
+    super('category-compressed', 'DIV');
     this.categorySummary = new CategorySummary();
     this.categoryList = new CategoryList();
+    this.initEventHandlers();
+  }
+
+  initEventHandlers() {
+    this.categorySummary.node.addEventListener('click', ({ target }) => this.handleClick(target));
+  }
+
+  handleClick(target) {
+    const summary = target.closest('.category-menu');
+
+    if (summary) {
+      this.toggle();
+    }
+  }
+
+  toggle() {
+    this.categorySummary.node.classList.toggle('active');
+    this.categoryList.node.classList.toggle('active');
   }
 
   getTemplate(menus) {
@@ -69,7 +85,7 @@ class CompressedCategoryList extends Component {
 
 class CategorySummary extends Component {
   constructor() {
-    super('category-menu', 'SUMMARY');
+    super('category-menu', 'DIV');
     this.init();
   }
 
