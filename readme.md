@@ -1,6 +1,6 @@
-# 아마존 쇼핑몰 사이트 클론 프로젝트
+# 아마존 쇼핑몰 사이트
 
-> Amazon Shopping Mall Site Clone Project
+> Amazon Shopping Mall
 
 - 아마존 사이트: https://www.amazon.com/
 - DEMO
